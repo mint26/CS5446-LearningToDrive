@@ -50,7 +50,7 @@ else:
     action_noise = OrnsteinUhlenbeckActionNoise(
             mean=np.zeros(n_actions),
             theta=float(0.6) * np.ones(n_actions),
-            sigma=float(0.2) * np.ones(n_actions)
+            sigma=float(0.4) * np.ones(n_actions)
             )
 
     ddpg = DDPG(LnMlpPolicy,
