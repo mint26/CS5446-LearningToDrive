@@ -35,13 +35,27 @@ if os.path.exists(PATH_MODEL_DDPG + ".pkl") and \
     vae.load(PATH_MODEL_VAE)
 
     obs = env.reset()
+    episode_reward = 0
+    current_episode = 0
     while True:
         action, _states = ddpg.predict(obs)
-        print(action)
         obs, reward, done, info = env.step(action)
+        episode_reward += reward
         if done:
+            current_episode += 1
             env.reset()
+            print("reward : " , episode_reward)
+            reward_stat = { "reward": episode_reward}
+            df = pd.DataFrame([reward_stat])
+            header = reward_stat.keys() 
+            if os.path.exists("rewards.csv"): 
+            	header = False 
+            df.to_csv("rewards.csv", mode='a', header=header, index=False)
+            episode_reward = 0
+            if current_episode > 50: 
+            	break
         env.render()
+
 # Run in training mode.
 else:
     print("Task: train")

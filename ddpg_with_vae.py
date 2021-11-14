@@ -7,8 +7,10 @@ and reimplements learning method.
 """
 
 import time
+import os
 
 import numpy as np
+import pandas as pd
 from mpi4py import MPI
 
 from stable_baselines import logger
@@ -91,14 +93,14 @@ class DDPGWithVAE(DDPG):
 
                 # Train VAE.
                 train_start = time.time()
-                vae.optimize()
-                print("VAE training duration:", time.time() - train_start)
+                # vae.optimize()
+                # print("VAE training duration:", time.time() - train_start)
 
                 # Train DDPG.
                 actor_losses = []
                 critic_losses = []
                 train_start = time.time()
-                if episodes > skip_episodes:
+       	        if episodes > skip_episodes:
                     for t_train in range(self.nb_train_steps):
                         critic_loss, actor_loss = self._train_step(0, None, log=t_train == 0)
                         critic_losses.append(critic_loss)
@@ -144,3 +146,8 @@ class DDPGWithVAE(DDPG):
                         logger.record_tabular(key, combined_stats[key])
                     logger.dump_tabular()
                     logger.info('')
+                    df = pd.DataFrame([combined_stats])
+                    header = combined_stats.keys()
+                    if os.path.exists('logs.csv'):
+                    	header = False
+                    df.to_csv('logs.csv', mode='a', header=header, index=False)
