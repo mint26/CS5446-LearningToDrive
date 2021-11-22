@@ -1,72 +1,70 @@
-# learning-to-drive-in-a-day
+# CS5446 - Project Topic : Learning to drive in a day
 
-DISCLAIMER: This repo is a boilerplate for the approach described in paper. It works in general, but not stable enough to reproduce good policy in 100% cases. I recommend to play with [pretrained VAE](#disable-vae-optimization) to get quicker results.
+## Project Introduction
 
-![](content/example-after-3000-steps.gif)
+[Wayve](https://wayve.ai/) is a pioneering artificial intelligence software company for self-driving cars. Their unique end-to-end machine learning approach learns to drive in new places more efficiently than competing technology. There are two main algorithmic designs for the auto-driving system, which is the modular system and the end-to-end driving system. Modular systems, which are widely used in the real-world auto-driving systems, are structured as a pipeline of separate components linking sensory inputs to actuator outputs. Those components include localization and mapping, perception,
+assessment, planning and decision making, vehicle control, and human-machine interface etc. However, modular systems have certain drawbacks; being prone to error propagation and over-complexity. End-to-end driving system, however, is a
+promising next-generation auto-driving approach, which will generate ego-motion like steering wheel and pedals directly from sensory inputs. There are three main approaches for end-to-end driving systems: direct supervised deep learning, neuroevolution and the more recent deep reinforcement learning. We will focus on deep reinforcement learning in our project.
 
-Video with [real RC car](https://www.youtube.com/watch?v=6JUjDw9tfD4).
+In this project, we will study Wayve’s first application of deep reinforcement learning onboard an autonomous car [2], which achieves the first real world run with Deep Q Networks (DQN) in a countryside road without traffic. For the implementation, the base code is forked from a [boilerplate git repository](https://github.com/r7vme/learning-to-drive-in-a-day). Further changes were made to cater to fix the dependencies and the experiment we wanted to conduct in this project.
 
-Code that implements approach similar to described in ["Learning to Drive in a Day"](https://arxiv.org/pdf/1807.00412.pdf) paper.
+## Project Setup
 
-Missing parts:
-- Prioritized Experience Replay in DDPG. Right now we randomly sample.
-- Params well tuning to drive more smoothly.
+- The following prerequisite will be needed in order to have the application running in the machine:
 
-# Quick start
+  - Linux OS (Alternatively, can use [virtual box](https://www.virtualbox.org/) or [parallel desktop](https://www.parallels.com) if using Mac OS/Windows)
+  - [Docker](https://docs.docker.com/engine/install/ubuntu/)
+  - [Compiled Donkey Car Simulator](https://drive.google.com/open?id=1sK2luxKYV1cpaZLhVwfXrmGU3TRa5C3B)
 
-NOTE: Assuming Intel Graphics (`/dev/dri`) present.
+- After having all the prerequisite fulfill, the application can be build by running the docker command. This command will install the libraries indicated in the requirement.txt.
+  ```
+  docker build -t learning-to-drive-in-a-day .
+  ```
 
-Download compiled [Donkey Car simulator](https://drive.google.com/open?id=1sK2luxKYV1cpaZLhVwfXrmGU3TRa5C3B) ([source](https://github.com/tawnkramer/sdsandbox/tree/donkey)) into `$HOME/sim` directory.
+## Running the application
 
-Run training.
-```
-docker build -t learning-to-drive-in-a-day .
-./run-in-docker.sh
-```
+- Once the application is set up, you can run the application with the following command. (Note that by default it will train the agent using VAE. If you want to train the agent, without vae, you can do so by updating the run-in-docker.sh and point the last variable to `run-without-vae.py` instead)
+  ```
+  sudo ./run-in-docker.sh`
+  ```
 
-Run test with the same command (script run test if there are trained models `ddpg.pkl` and `vae.json`).
-```
-./run-in-docker.sh
-```
-
-# Under the hood
-
-Script does the following:
-- Initialize Donkey OpenAI gym environment.
-- Initialize VAE controller with random weights.
-- If no pretrained models found, run in train mode. Otherwise just load weights from files and run test.
-- Initialize DDPG controller.
-- Learning function will collect the data by running 10 episodes w/o DDPG optimization, then after every episode DDPG optimization happens. VAE optimized after every episode.
-- After 3000 steps training will be finished and weights params will be saved to files.
-
-# Troubleshooting
-
-## Disable VAE optimization
-
-Implementation is still very very raw and needs fine tuning, so to get quick results i recommend to run full session and then reuse `vae.json` (or use [pretrained](https://drive.google.com/open?id=16WYkH7goKnJM52ke1KAzs5vozGiuKPqu)) in new training session by adding `vae.load(PATH_MODEL_VAE)` before `ddpg.learn` and commenting out `vae.optimize()` in `ddpg_with_vae.py`. This will allow to train DDPG very quickly even on CPU machine.
-
-## Visualize what car sees
-
-Following code can be used to decode VAE's Z latent vector and save to image.
+## Project Structure
 
 ```
-arr = vae.decode(obs)
-arr = np.round(arr).astype(np.uint8)
-arr = arr.reshape(80, 160, 3)
-# pip install Pillow
-img = PIL.Image.fromarray(arr)
-img.save('decoded_img.jpg')
+
+├── demo                        // folder containing the gifs to showcase the result for both DDPG only and DDPG + VAE
+├── backup_model                // contains the train models used in this experiment
+├── result                      // contains the statistics recorded during training and testing phase
+├── vae                         // contains the code used to train the VAE
+├── Dockerfile                  // docker configuration file used to build the docker image
+├── .gitignore                  // indicates the files shouldn't be pushed to git
+├── requirement.txt             // python config file on the dependencies
+├── run-in-docker.sh            // bash script used to run the application
+├── run-with-vae.py             // python file used to train or test the agent with VAE depends if the model exists
+├── run-with-vae.py             // python file used to train or test the agent without VAE depends if the model exists
+├── SetUnityLowResolution.sh    // used to set the unity to lower resolution if needed
+├── README.md                   // this file
+├── report.pdf                  // the report for the module final project
+
+
 ```
 
-Add this code in test section of `run.py`.
+## Demonstration
 
-## Try pretrained models
+Here's a demonstration of the donkey car experiment using DDPG + VAE.
 
-Just to make sure that environment was setup correctly try [pretrained models](https://drive.google.com/open?id=16WYkH7goKnJM52ke1KAzs5vozGiuKPqu). Place `ddpg.pkl` and `vae.json` into the root directory and run `./run-in-docker.sh`. You should see similar to the GIF above.
+### Agent in initial training phase
 
-# Credits
+![Agent in initial training phase](https://user-images.githubusercontent.com/25121123/142881980-ab3ee95a-ff36-413b-a00c-68a78847c7b1.gif)
 
-- [wayve.ai](wayve.ai) for idea and inspiration.
-- [Tawn Kramer](https://github.com/tawnkramer) for Donkey simulator and Donkey Gym.
-- [stable-baselines](https://github.com/hill-a/stable-baselines) for DDPG implementation.
-- [world models experiments](https://github.com/hardmaru/WorldModelsExperiments) for VAE implementation.
+#### Agent in later training phase
+
+![Agent in later training phase](https://user-images.githubusercontent.com/25121123/142882008-af4dc90e-7360-4c57-83ff-7282e800e436.gif)
+
+## Notes
+
+The codes can be further refactored for better performance and maintainability: </br>
+
+- refactor the shell script to accept parameter to take in the two various approaches instead of manually change it in the script
+- do experiment using other parameters to see whether it would work better like mentioned in the paper
+- use other algorithms such as TD3 which might help in improving the accuracy of the navigation

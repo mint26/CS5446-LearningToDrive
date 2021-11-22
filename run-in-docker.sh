@@ -14,4 +14,4 @@ docker run --net host \
     -v $HOME/sim:/sim \
     -v $(pwd):/code \
     -w /code \
-    learning-to-drive-in-a-day ./run.py
+    learning-to-drive-in-a-day ./run-with-vae.py
