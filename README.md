@@ -26,7 +26,7 @@ In this project, we will study Wayve’s [first application of deep reinforcemen
 - Once the application is set up, you can run the application with the following command. (Note that by default it will train the agent using VAE.
 
   ```
-  sudo ./run-in-docker.sh`
+  sudo ./run-in-docker.sh
   ```
 
 - If you want to train the agent, without vae, you can do so by copy and paste the following command to `run-in-docker.sh` so it will point the entry point to `run-without-vae.py` instead)
