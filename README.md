@@ -61,6 +61,8 @@ docker run --net host \
     ├── pretrained_model        // contains the pretrained model provided by the boilerplate repository
     ├── our_model               // contains our own model including ddpg only and ddpg + vae
 ├── result                      // contains the statistics recorded during training and testing phase
+    ├── training result         // combined statistics recorded during the training phase
+    ├── testing result          // recorded reward result during the testing phase using various model
 ├── vae                         // contains the code used to train the VAE
 ├── Dockerfile                  // docker configuration file used to build the docker image
 ├── .gitignore                  // indicates the files shouldn't be pushed to git
