@@ -6,7 +6,7 @@
 assessment, planning and decision making, vehicle control, and human-machine interface etc. However, modular systems have certain drawbacks; being prone to error propagation and over-complexity. End-to-end driving system, however, is a
 promising next-generation auto-driving approach, which will generate ego-motion like steering wheel and pedals directly from sensory inputs. There are three main approaches for end-to-end driving systems: direct supervised deep learning, neuroevolution and the more recent deep reinforcement learning. We will focus on deep reinforcement learning in our project.
 
-In this project, we will study Wayve’s first application of deep reinforcement learning onboard an autonomous car [2], which achieves the first real world run with Deep Q Networks (DQN) in a countryside road without traffic. For the implementation, the base code is forked from a [boilerplate git repository](https://github.com/r7vme/learning-to-drive-in-a-day). Further changes were made to cater to fix the dependencies and the experiment we wanted to conduct in this project.
+In this project, we will study Wayve’s [first application of deep reinforcement learning onboard an autonomous car](https://www.researchgate.net/publication/326144771_Learning_to_Drive_in_a_Day), which achieves the first real world run with Deep Q Networks (DQN) in a countryside road without traffic. For the implementation, the base code is forked from a [boilerplate git repository](https://github.com/r7vme/learning-to-drive-in-a-day). Further changes were made to cater to fix the dependencies and the experiment we wanted to conduct in this project.
 
 ## Project Setup
 
