@@ -1,4 +1,4 @@
-# CS5446 - Project Topic : Learning to drive in a day
+# CS5446 - Learning to drive in a day
 
 ## Project Introduction
 
