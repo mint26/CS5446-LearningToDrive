@@ -50,7 +50,7 @@ docker run --net host \
 - Note that the donkey car simulator need to be loaded first so that the connection between the application and simulation can be detected. Also, do check the error message. If it returns missing port number, do check the configured port number of the simulation application. Currently, its set to port 9091.
 
 - Quick reference to run the application in simulator
-  ![Step to run the application in simulator](<(https://user-images.githubusercontent.com/25121123/142888775-fbdb56d0-260c-485d-ba40-98b3a48d451b.gif)>)
+  ![Step to run the application in simulator](https://user-images.githubusercontent.com/25121123/142888775-fbdb56d0-260c-485d-ba40-98b3a48d451b.gif)
 
 ## Project Structure
 
