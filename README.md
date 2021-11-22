@@ -23,10 +23,31 @@ In this project, we will study Wayve’s [first application of deep reinforcemen
 
 ## Running the application
 
-- Once the application is set up, you can run the application with the following command. (Note that by default it will train the agent using VAE. If you want to train the agent, without vae, you can do so by updating the run-in-docker.sh and point the last variable to `run-without-vae.py` instead)
+- Once the application is set up, you can run the application with the following command. (Note that by default it will train the agent using VAE.
+
   ```
   sudo ./run-in-docker.sh`
   ```
+
+- If you want to train the agent, without vae, you can do so by copy and paste the following command to `run-in-docker.sh` so it will point the entry point to `run-without-vae.py` instead)
+
+```
+docker run --net host \
+    --rm \
+    -ti \
+    -e DISPLAY \
+    -e DONKEY_SIM_HEADLESS=0 \
+    -e DONKEY_SIM_PORT=9091 \
+    -e DONKEY_SIM_PATH=./sim/donkey_sim.x86_64 \
+    -v $HOME/.Xauthority:/root/.Xauthority \
+    -v $HOME/sim:/sim \
+    -v $(pwd):/code \
+    -w /code \
+    --device=/dev/dri:/dev/dri \
+    learning-to-drive-in-a-day ./run-without-vae.py
+```
+
+- Note that the donkey car simulator need to be loaded first so that the connection between the application and simulation can be detected. Also, do check the error message. If it returns missing port number, do check the configured port number of the simulation application. Currently, its set to port 9091.
 
 ## Project Structure
 
@@ -34,6 +55,8 @@ In this project, we will study Wayve’s [first application of deep reinforcemen
 
 ├── demo                        // folder containing the gifs to showcase the result for both DDPG only and DDPG + VAE
 ├── backup_model                // contains the train models used in this experiment
+    ├── pretrained_model        // contains the pretrained model provided by the boilerplate repository
+    ├── our_model               // contains our own model including ddpg only and ddpg + vae
 ├── result                      // contains the statistics recorded during training and testing phase
 ├── vae                         // contains the code used to train the VAE
 ├── Dockerfile                  // docker configuration file used to build the docker image
